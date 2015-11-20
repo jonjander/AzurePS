@@ -10,7 +10,7 @@ function Confirm-a365AzureDefaultSubscription {
     Param
     ()
 
-    Get-AzureSubscription -Default | select "SubscriptionName","Environment","DefaultAccount","CurrentStorageAccountName" | Format-List
+    Get-AzureSubscription -Default | select "SubscriptionId","SubscriptionName","Environment","DefaultAccount","CurrentStorageAccountName" | Format-List
     $title = "Use subscription"
     $message = "Do you want to use this subscription?"
     $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", `
@@ -48,7 +48,7 @@ function Confirm-a365AzureDefaultSubscription {
             $result = $host.ui.PromptForChoice($title, $message, $options, 0) 
             $i
             if ($result -eq $subbisar.Count) {
-                Write-Verbose "Not in the list adding azure account"
+                Write-Verbose "Not in the list, adding azure account"
                 $acureAcc = Add-AzureAccount -ErrorAction Stop -WarningAction Stop
                 $acureAcc.Subscriptions.Split("`n") | % {Get-AzureSubscription -SubscriptionId $_} | select "SubscriptionId","SubscriptionName","Environment","DefaultAccount","CurrentStorageAccountName"
                 $acureAccSubId=$acureAcc.Subscriptions.Split("`n")
